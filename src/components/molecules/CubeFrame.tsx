@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Line } from '@react-three/drei';
 import * as THREE from 'three';
@@ -49,8 +49,8 @@ export function CubeFrame({ sliceView, focusedSlice }: CubeFrameProps) {
   const half = 1.5 * CELL_SPACING;
   const isSplitting = focusedSlice !== null && sliceView === 'horizontal';
 
-  // Build per-layer grid lines
-  const layers = [0, 1, 2].map((layer) => {
+  // Build per-layer grid lines (memoized — only depends on constants)
+  const layers = useMemo(() => [0, 1, 2].map((layer) => {
     const y = (1 - layer) * LAYER_GAP;
     const lines: Array<{ points: [number, number, number][]; opacity: number }> = [];
 
@@ -71,20 +71,23 @@ export function CubeFrame({ sliceView, focusedSlice }: CubeFrameProps) {
     }
 
     return { layer, y, lines };
-  });
+  }), [half]);
 
-  // Vertical corner pillars
-  const pillarLines: Array<{ points: [number, number, number][]; opacity: number }> = [];
-  const corners = [[-1.5, -1.5], [-1.5, 1.5], [1.5, -1.5], [1.5, 1.5]];
-  for (const [xOff, zOff] of corners) {
-    pillarLines.push({
-      points: [
-        [xOff * CELL_SPACING, LAYER_GAP, zOff * CELL_SPACING],
-        [xOff * CELL_SPACING, -LAYER_GAP, zOff * CELL_SPACING],
-      ],
-      opacity: 0.25,
-    });
-  }
+  // Vertical corner pillars (memoized)
+  const pillarLines = useMemo(() => {
+    const lines: Array<{ points: [number, number, number][]; opacity: number }> = [];
+    const corners = [[-1.5, -1.5], [-1.5, 1.5], [1.5, -1.5], [1.5, 1.5]];
+    for (const [xOff, zOff] of corners) {
+      lines.push({
+        points: [
+          [xOff * CELL_SPACING, LAYER_GAP, zOff * CELL_SPACING],
+          [xOff * CELL_SPACING, -LAYER_GAP, zOff * CELL_SPACING],
+        ],
+        opacity: 0.25,
+      });
+    }
+    return lines;
+  }, []);
 
   return (
     <group>

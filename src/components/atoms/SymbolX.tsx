@@ -26,24 +26,26 @@ export function SymbolX({ position, dimmed = false, highlighted = false }: Symbo
 
   return (
     <group ref={groupRef} position={position}>
-      {/* Bar 1 - diagonal */}
-      <mesh rotation={[0, Math.PI / 4, Math.PI / 4]}>
+      {/* Bar 1 - diagonal (Z-axis rotation for consistent X shape from all angles) */}
+      <mesh rotation={[0, 0, Math.PI / 4]}>
         <boxGeometry args={barSize} />
         <meshStandardMaterial
           color={color}
           emissive={color}
           emissiveIntensity={highlighted ? 0.8 : 0.4}
+          toneMapped={false}
           transparent={dimmed}
           opacity={opacity}
         />
       </mesh>
       {/* Bar 2 - other diagonal */}
-      <mesh rotation={[0, -Math.PI / 4, -Math.PI / 4]}>
+      <mesh rotation={[0, 0, -Math.PI / 4]}>
         <boxGeometry args={barSize} />
         <meshStandardMaterial
           color={color}
           emissive={color}
           emissiveIntensity={highlighted ? 0.8 : 0.4}
+          toneMapped={false}
           transparent={dimmed}
           opacity={opacity}
         />

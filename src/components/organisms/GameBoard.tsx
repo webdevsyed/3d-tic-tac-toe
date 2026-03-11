@@ -1,8 +1,7 @@
-import { Canvas } from '@react-three/fiber';
+import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
-import { useCallback, useRef, useState } from 'react';
-import { useFrame } from '@react-three/fiber';
-import * as THREE from 'three';
+import { useCallback, useMemo, useRef, useState } from 'react';
+import type { Group } from 'three';
 import { useGameStore } from '../../stores/gameStore';
 import { CubeFrame } from '../molecules/CubeFrame';
 import { WinningLine } from '../molecules/WinningLine';
@@ -29,7 +28,7 @@ function AnimatedSliceGroup({
   focusedSlice: number | null;
   children: React.ReactNode;
 }) {
-  const groupRef = useRef<THREE.Group>(null);
+  const groupRef = useRef<Group>(null);
   const targetOffset = getSliceSplitOffset(sliceIndex, sliceView, focusedSlice);
 
   useFrame((_, delta) => {
@@ -87,18 +86,21 @@ function BoardScene() {
     }
   };
 
-  // Group cells by slice index for animated splitting
-  const sliceGroups: Map<number, Array<{ coord: BoardCoord; li: number; ri: number; ci: number; cellValue: PlayerID | null }>> = new Map();
-  board.forEach((layer, li) =>
-    layer.forEach((row, ri) =>
-      row.forEach((cellValue, ci) => {
-        const coord: BoardCoord = [li, ri, ci];
-        const si = getSliceIndex(coord, sliceView);
-        if (!sliceGroups.has(si)) sliceGroups.set(si, []);
-        sliceGroups.get(si)!.push({ coord, li, ri, ci, cellValue });
-      })
-    )
-  );
+  // Group cells by slice index for animated splitting (memoized)
+  const sliceGroups = useMemo(() => {
+    const groups: Map<number, Array<{ coord: BoardCoord; li: number; ri: number; ci: number; cellValue: PlayerID | null }>> = new Map();
+    board.forEach((layer, li) =>
+      layer.forEach((row, ri) =>
+        row.forEach((cellValue, ci) => {
+          const coord: BoardCoord = [li, ri, ci];
+          const si = getSliceIndex(coord, sliceView);
+          if (!groups.has(si)) groups.set(si, []);
+          groups.get(si)!.push({ coord, li, ri, ci, cellValue });
+        })
+      )
+    );
+    return groups;
+  }, [board, sliceView]);
 
   return (
     <>

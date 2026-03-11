@@ -30,6 +30,7 @@ export function SymbolSphere({ position, dimmed = false, highlighted = false }: 
           color={color}
           emissive={color}
           emissiveIntensity={highlighted ? 0.8 : 0.3}
+          toneMapped={false}
           roughness={0.2}
           metalness={0.3}
           transparent={dimmed}

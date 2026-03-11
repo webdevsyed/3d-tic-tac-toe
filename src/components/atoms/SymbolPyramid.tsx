@@ -31,6 +31,7 @@ export function SymbolPyramid({ position, dimmed = false, highlighted = false }:
           color={color}
           emissive={color}
           emissiveIntensity={highlighted ? 0.8 : 0.3}
+          toneMapped={false}
           roughness={0.4}
           metalness={0.2}
           flatShading

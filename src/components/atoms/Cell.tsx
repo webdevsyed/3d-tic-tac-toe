@@ -49,14 +49,14 @@ export function Cell({
 
   return (
     <group position={position}>
-      {/* Invisible click target */}
+      {/* Invisible click target — colorWrite=false is cheaper than transparent opacity=0 */}
       <mesh
         onClick={handleClick}
         onPointerEnter={handlePointerEnter}
         onPointerLeave={handlePointerLeave}
       >
         <boxGeometry args={[0.9, 0.9, 0.9]} />
-        <meshBasicMaterial transparent opacity={0} />
+        <meshBasicMaterial colorWrite={false} depthWrite={false} />
       </mesh>
 
       {/* Cell slot indicator (faint dot when empty) */}
