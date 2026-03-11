@@ -41,3 +41,44 @@ export function getCellOpacity(
 
   return sliceIndex === focusedSlice ? 1 : 0.1;
 }
+
+/**
+ * Get the slice index for a given coordinate based on the active slice view.
+ */
+export function getSliceIndex(coord: BoardCoord, sliceView: SliceView): number {
+  switch (sliceView) {
+    case 'horizontal':
+      return coord[0]; // layer
+    case 'vertical-x':
+      return coord[2]; // col
+    case 'vertical-z':
+      return coord[1]; // row
+  }
+}
+
+/**
+ * Compute the target split offset for a slice when a specific slice is focused.
+ * Unfocused slices move away; focused slice stays centered.
+ */
+export function getSliceSplitOffset(
+  sliceIndex: number,
+  sliceView: SliceView,
+  focusedSlice: number | null
+): [number, number, number] {
+  if (focusedSlice === null) return [0, 0, 0];
+
+  const SPLIT_DISTANCE = 1.5;
+  const diff = sliceIndex - focusedSlice;
+  if (diff === 0) return [0, 0, 0];
+
+  const offset = diff > 0 ? SPLIT_DISTANCE : -SPLIT_DISTANCE;
+
+  switch (sliceView) {
+    case 'horizontal':
+      return [0, -offset, 0]; // layers split on Y (inverted because layer 0 = top)
+    case 'vertical-x':
+      return [offset, 0, 0]; // cols split on X
+    case 'vertical-z':
+      return [0, 0, offset]; // rows split on Z
+  }
+}

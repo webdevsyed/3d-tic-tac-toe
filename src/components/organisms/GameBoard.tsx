@@ -1,6 +1,8 @@
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
+import { useFrame } from '@react-three/fiber';
+import * as THREE from 'three';
 import { useGameStore } from '../../stores/gameStore';
 import { CubeFrame } from '../molecules/CubeFrame';
 import { WinningLine } from '../molecules/WinningLine';
@@ -9,9 +11,37 @@ import { SymbolX } from '../atoms/SymbolX';
 import { SymbolSphere } from '../atoms/SymbolSphere';
 import { SymbolPyramid } from '../atoms/SymbolPyramid';
 import { GhostPreview } from '../atoms/GhostPreview';
-import { coordToPosition, getCellOpacity } from '../../utils/boardHelpers';
+import { coordToPosition, getCellOpacity, getSliceIndex, getSliceSplitOffset } from '../../utils/boardHelpers';
 import { DEFAULT_CAMERA_POSITION } from '../../utils/constants';
-import type { BoardCoord, PlayerID } from '../../types/game';
+import type { BoardCoord, PlayerID, SliceView } from '../../types/game';
+
+/**
+ * Animated group that smoothly lerps to a target offset for slice splitting.
+ */
+function AnimatedSliceGroup({
+  sliceIndex,
+  sliceView,
+  focusedSlice,
+  children,
+}: {
+  sliceIndex: number;
+  sliceView: SliceView;
+  focusedSlice: number | null;
+  children: React.ReactNode;
+}) {
+  const groupRef = useRef<THREE.Group>(null);
+  const targetOffset = getSliceSplitOffset(sliceIndex, sliceView, focusedSlice);
+
+  useFrame((_, delta) => {
+    if (!groupRef.current) return;
+    const speed = 5;
+    groupRef.current.position.x += (targetOffset[0] - groupRef.current.position.x) * Math.min(speed * delta, 1);
+    groupRef.current.position.y += (targetOffset[1] - groupRef.current.position.y) * Math.min(speed * delta, 1);
+    groupRef.current.position.z += (targetOffset[2] - groupRef.current.position.z) * Math.min(speed * delta, 1);
+  });
+
+  return <group ref={groupRef}>{children}</group>;
+}
 
 function BoardScene() {
   const board = useGameStore((s) => s.board);
@@ -57,6 +87,19 @@ function BoardScene() {
     }
   };
 
+  // Group cells by slice index for animated splitting
+  const sliceGroups: Map<number, Array<{ coord: BoardCoord; li: number; ri: number; ci: number; cellValue: PlayerID | null }>> = new Map();
+  board.forEach((layer, li) =>
+    layer.forEach((row, ri) =>
+      row.forEach((cellValue, ci) => {
+        const coord: BoardCoord = [li, ri, ci];
+        const si = getSliceIndex(coord, sliceView);
+        if (!sliceGroups.has(si)) sliceGroups.set(si, []);
+        sliceGroups.get(si)!.push({ coord, li, ri, ci, cellValue });
+      })
+    )
+  );
+
   return (
     <>
       {/* Lighting */}
@@ -65,14 +108,18 @@ function BoardScene() {
       <directionalLight position={[-4, -2, -3]} intensity={0.4} />
       <pointLight position={[0, 6, 0]} intensity={0.8} distance={15} />
 
-      {/* Cube wireframe */}
-      <CubeFrame />
+      {/* Cube wireframe with split support */}
+      <CubeFrame sliceView={sliceView} focusedSlice={focusedSlice} />
 
-      {/* Cells, symbols, and ghost previews */}
-      {board.map((layer, li) =>
-        layer.map((row, ri) =>
-          row.map((cellValue, ci) => {
-            const coord: BoardCoord = [li, ri, ci];
+      {/* Cells grouped by slice for animated splitting */}
+      {Array.from(sliceGroups.entries()).map(([si, cells]) => (
+        <AnimatedSliceGroup
+          key={`slice-${si}`}
+          sliceIndex={si}
+          sliceView={sliceView}
+          focusedSlice={focusedSlice}
+        >
+          {cells.map(({ coord, li, ri, ci, cellValue }) => {
             const position = coordToPosition(coord);
             const opacity = getCellOpacity(coord, sliceView, focusedSlice);
             const isHovered =
@@ -83,7 +130,6 @@ function BoardScene() {
 
             return (
               <group key={`${li}-${ri}-${ci}`}>
-                {/* Clickable cell */}
                 <Cell
                   position={position}
                   coord={coord}
@@ -94,19 +140,15 @@ function BoardScene() {
                   onPlace={placeMove}
                   onHover={handleHover}
                 />
-
-                {/* Placed symbol */}
                 {cellValue && renderSymbol(cellValue, position, coord)}
-
-                {/* Ghost preview on hover */}
                 {isHovered && !cellValue && isInteractive && opacity > 0.5 && (
                   <GhostPreview position={position} player={currentTurn} />
                 )}
               </group>
             );
-          })
-        )
-      )}
+          })}
+        </AnimatedSliceGroup>
+      ))}
 
       {/* Winning line beam */}
       {winningLine && winner && winner !== 'draw' && (
