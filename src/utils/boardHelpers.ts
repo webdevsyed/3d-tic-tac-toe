@@ -39,7 +39,7 @@ export function getSliceSplitOffset(
 ): [number, number, number] {
   if (sliceView === 'none') return [0, 0, 0];
 
-  const SPLIT_DISTANCE = 1.8;
+  const SPLIT_DISTANCE = 1.2;
   // sliceIndex 0 → -1, sliceIndex 1 → 0, sliceIndex 2 → +1
   const direction = sliceIndex - 1;
   const offset = direction * SPLIT_DISTANCE;

@@ -1,9 +1,9 @@
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { useCallback, useMemo, useRef, useState } from 'react';
+import * as THREE from 'three';
 import type { Group } from 'three';
 import { useGameStore } from '../../stores/gameStore';
-import { CubeFrame } from '../molecules/CubeFrame';
 import { WinningLine } from '../molecules/WinningLine';
 import { Cell } from '../atoms/Cell';
 import { SymbolX } from '../atoms/SymbolX';
@@ -11,8 +11,20 @@ import { SymbolSphere } from '../atoms/SymbolSphere';
 import { SymbolPyramid } from '../atoms/SymbolPyramid';
 import { GhostPreview } from '../atoms/GhostPreview';
 import { coordToPosition, getSliceIndex, getSliceSplitOffset } from '../../utils/boardHelpers';
-import { DEFAULT_CAMERA_POSITION } from '../../utils/constants';
+import { CELL_SPACING, DEFAULT_CAMERA_POSITION } from '../../utils/constants';
 import type { BoardCoord, PlayerID, SliceView } from '../../types/game';
+
+// Shared geometry for all 27 cell wireframes (allocated once)
+const cellBoxGeometry = new THREE.BoxGeometry(CELL_SPACING, CELL_SPACING, CELL_SPACING);
+const cellEdgesGeometry = new THREE.EdgesGeometry(cellBoxGeometry);
+
+function CellWireframe({ position }: { position: [number, number, number] }) {
+  return (
+    <lineSegments geometry={cellEdgesGeometry} position={position}>
+      <lineBasicMaterial color="#ffffff" transparent opacity={0.2} />
+    </lineSegments>
+  );
+}
 
 /**
  * Animated group that smoothly lerps to a target offset for slice splitting.
@@ -107,9 +119,6 @@ function BoardScene() {
       <directionalLight position={[-4, -2, -3]} intensity={0.6} />
       <pointLight position={[0, 6, 0]} intensity={1.2} distance={20} />
 
-      {/* Cube wireframe with split support */}
-      <CubeFrame sliceView={sliceView} />
-
       {/* Cells grouped by slice for animated splitting */}
       {Array.from(sliceGroups.entries()).map(([si, cells]) => (
         <AnimatedSliceGroup
@@ -127,6 +136,7 @@ function BoardScene() {
 
             return (
               <group key={`${li}-${ri}-${ci}`}>
+                <CellWireframe position={position} />
                 <Cell
                   position={position}
                   coord={coord}
