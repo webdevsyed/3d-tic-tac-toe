@@ -24,8 +24,9 @@ export function SymbolPyramid({ position, dimmed = false, highlighted = false }:
 
   return (
     <group position={position}>
-      <mesh ref={meshRef} rotation={[0, 0, 0]}>
-        <coneGeometry args={[0.3, 0.5, 4]} />
+      {/* Triangular pyramid: 3 radial segments, rotated so a face is toward camera */}
+      <mesh ref={meshRef} rotation={[0, Math.PI / 6, 0]}>
+        <coneGeometry args={[0.28, 0.45, 3]} />
         <meshStandardMaterial
           color={color}
           emissive={color}

@@ -21,12 +21,13 @@ export function SymbolX({ position, dimmed = false, highlighted = false }: Symbo
   const color = PLAYER_COLORS.P1;
   const opacity = dimmed ? 0.3 : 1;
   const lightIntensity = highlighted ? SYMBOL_LIGHT_INTENSITY * 3 : SYMBOL_LIGHT_INTENSITY;
-  const barSize: [number, number, number] = [0.08, 0.08, 0.55];
+  // Bar long in X, thin in Y and Z — rotated around Y to form an X visible from all angles
+  const barSize: [number, number, number] = [0.5, 0.07, 0.07];
 
   return (
     <group ref={groupRef} position={position}>
       {/* Bar 1 - diagonal */}
-      <mesh rotation={[0, 0, Math.PI / 4]}>
+      <mesh rotation={[0, Math.PI / 4, Math.PI / 4]}>
         <boxGeometry args={barSize} />
         <meshStandardMaterial
           color={color}
@@ -37,7 +38,7 @@ export function SymbolX({ position, dimmed = false, highlighted = false }: Symbo
         />
       </mesh>
       {/* Bar 2 - other diagonal */}
-      <mesh rotation={[0, 0, -Math.PI / 4]}>
+      <mesh rotation={[0, -Math.PI / 4, -Math.PI / 4]}>
         <boxGeometry args={barSize} />
         <meshStandardMaterial
           color={color}
@@ -47,7 +48,6 @@ export function SymbolX({ position, dimmed = false, highlighted = false }: Symbo
           opacity={opacity}
         />
       </mesh>
-      {/* Point light in player color */}
       <pointLight
         color={color}
         intensity={lightIntensity}

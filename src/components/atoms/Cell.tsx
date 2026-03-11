@@ -6,6 +6,7 @@ interface CellProps {
   position: [number, number, number];
   coord: BoardCoord;
   occupied: boolean;
+  occupiedBy: PlayerID | null;
   currentPlayer: PlayerID;
   isInteractive: boolean;
   opacity?: number;
@@ -17,6 +18,7 @@ export function Cell({
   position,
   coord,
   occupied,
+  occupiedBy,
   currentPlayer,
   isInteractive,
   opacity = 1,
@@ -43,6 +45,7 @@ export function Cell({
 
   const showHighlight = hovered && isInteractive && !occupied;
   const playerColor = PLAYER_COLORS[currentPlayer];
+  const occupiedColor = occupiedBy ? PLAYER_COLORS[occupiedBy] : undefined;
 
   return (
     <group position={position}>
@@ -76,6 +79,18 @@ export function Cell({
             color={playerColor}
             transparent
             opacity={0.08 * opacity}
+          />
+        </mesh>
+      )}
+
+      {/* Occupied cell glow */}
+      {occupied && occupiedColor && (
+        <mesh>
+          <boxGeometry args={[0.8, 0.8, 0.8]} />
+          <meshBasicMaterial
+            color={occupiedColor}
+            transparent
+            opacity={0.06 * opacity}
           />
         </mesh>
       )}

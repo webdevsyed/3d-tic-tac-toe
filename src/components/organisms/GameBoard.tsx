@@ -134,6 +134,7 @@ function BoardScene() {
                   position={position}
                   coord={coord}
                   occupied={cellValue !== null}
+                  occupiedBy={cellValue}
                   currentPlayer={currentTurn}
                   isInteractive={isInteractive && opacity > 0.5}
                   opacity={opacity}
