@@ -30,7 +30,7 @@ export function HomeScreen({ onShowHelp }: HomeScreenProps) {
         </div>
 
         {/* Menu */}
-        <div className="flex flex-col gap-4 w-full max-w-64 mx-auto">
+        <div className="flex flex-col items-center gap-4 w-full max-w-64 mx-auto">
           <button
             onClick={() => setScreen('setup')}
             className="btn-neon text-base py-4 hover:scale-105 transition-transform"
