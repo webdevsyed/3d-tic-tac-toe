@@ -10,9 +10,6 @@ interface CubeFrameProps {
   sliceView: SliceView;
 }
 
-/**
- * Animated group for a single layer's grid lines + box enclosure.
- */
 function AnimatedLayerGrid({
   layerIndex,
   sliceView,
@@ -23,7 +20,6 @@ function AnimatedLayerGrid({
   children: React.ReactNode;
 }) {
   const groupRef = useRef<THREE.Group>(null);
-  // Only animate horizontal splits for the grid structure
   const targetOffset = sliceView === 'horizontal'
     ? getSliceSplitOffset(layerIndex, sliceView)
     : [0, 0, 0] as [number, number, number];
@@ -40,58 +36,61 @@ function AnimatedLayerGrid({
 }
 
 /**
- * Renders the wireframe structure of the 3×3×3 cube with:
- * - Grid lines for each layer (animated split on horizontal view)
- * - Semi-transparent box enclosures for depth
- * - Vertical corner pillars (hidden when splitting)
+ * Full 3D Rubik's-cube-style grid: each cell has visible bounding edges.
+ * Per layer: horizontal grids at top + bottom, vertical lines at all 16 intersections.
  */
 export function CubeFrame({ sliceView }: CubeFrameProps) {
   const half = 1.5 * CELL_SPACING;
-  const isSplitting = sliceView !== 'none';
+  const halfY = LAYER_GAP / 2;
 
-  // Build per-layer grid lines (memoized)
+  // Grid positions along X and Z (cell boundaries)
+  const gridPos = [-1.5, -0.5, 0.5, 1.5].map((v) => v * CELL_SPACING);
+
   const layers = useMemo(() => [0, 1, 2].map((layer) => {
-    const y = (1 - layer) * LAYER_GAP;
+    const yCenter = (1 - layer) * LAYER_GAP;
+    const yTop = yCenter + halfY;
+    const yBot = yCenter - halfY;
+
     const lines: Array<{ points: [number, number, number][]; opacity: number }> = [];
 
-    for (let i = 0; i <= 3; i++) {
-      const z = (i - 1.5) * CELL_SPACING;
-      lines.push({
-        points: [[-half, y, z], [half, y, z]],
-        opacity: i === 0 || i === 3 ? 0.45 : 0.25,
-      });
+    // Horizontal grids at top and bottom of this layer
+    for (const y of [yTop, yBot]) {
+      // Lines along X at each Z position
+      for (const z of gridPos) {
+        const isEdge = Math.abs(z) > CELL_SPACING;
+        lines.push({
+          points: [[-half, y, z], [half, y, z]],
+          opacity: isEdge ? 0.35 : 0.18,
+        });
+      }
+      // Lines along Z at each X position
+      for (const x of gridPos) {
+        const isEdge = Math.abs(x) > CELL_SPACING;
+        lines.push({
+          points: [[x, y, -half], [x, y, half]],
+          opacity: isEdge ? 0.35 : 0.18,
+        });
+      }
     }
 
-    for (let i = 0; i <= 3; i++) {
-      const x = (i - 1.5) * CELL_SPACING;
-      lines.push({
-        points: [[x, y, -half], [x, y, half]],
-        opacity: i === 0 || i === 3 ? 0.45 : 0.25,
-      });
+    // Vertical lines at every grid intersection (4×4 = 16 pillars per layer)
+    for (const x of gridPos) {
+      for (const z of gridPos) {
+        const isCorner = Math.abs(x) > CELL_SPACING && Math.abs(z) > CELL_SPACING;
+        const isEdge = Math.abs(x) > CELL_SPACING || Math.abs(z) > CELL_SPACING;
+        lines.push({
+          points: [[x, yTop, z], [x, yBot, z]],
+          opacity: isCorner ? 0.35 : isEdge ? 0.25 : 0.15,
+        });
+      }
     }
 
-    return { layer, y, lines };
-  }), [half]);
-
-  // Vertical corner pillars (memoized)
-  const pillarLines = useMemo(() => {
-    const lines: Array<{ points: [number, number, number][]; opacity: number }> = [];
-    const corners = [[-1.5, -1.5], [-1.5, 1.5], [1.5, -1.5], [1.5, 1.5]];
-    for (const [xOff, zOff] of corners) {
-      lines.push({
-        points: [
-          [xOff * CELL_SPACING, LAYER_GAP, zOff * CELL_SPACING],
-          [xOff * CELL_SPACING, -LAYER_GAP, zOff * CELL_SPACING],
-        ],
-        opacity: 0.35,
-      });
-    }
-    return lines;
-  }, []);
+    return { layer, yCenter, lines };
+  }), [half, halfY, gridPos]);
 
   return (
     <group>
-      {layers.map(({ layer, y, lines }) => (
+      {layers.map(({ layer, yCenter, lines }) => (
         <AnimatedLayerGrid
           key={`layer-${layer}`}
           layerIndex={layer}
@@ -102,36 +101,24 @@ export function CubeFrame({ sliceView }: CubeFrameProps) {
               key={i}
               points={line.points}
               color="#ffffff"
-              lineWidth={1.5}
+              lineWidth={1}
               transparent
               opacity={line.opacity}
             />
           ))}
 
-          {/* Semi-transparent box enclosure for this layer */}
-          <mesh position={[0, y, 0]}>
-            <boxGeometry args={[half * 2, LAYER_GAP * 0.85, half * 2]} />
+          {/* Semi-transparent box enclosure for depth */}
+          <mesh position={[0, yCenter, 0]}>
+            <boxGeometry args={[half * 2, LAYER_GAP * 0.95, half * 2]} />
             <meshStandardMaterial
               color="#8888ff"
               transparent
-              opacity={0.04}
+              opacity={0.03}
               side={THREE.BackSide}
               depthWrite={false}
             />
           </mesh>
         </AnimatedLayerGrid>
-      ))}
-
-      {/* Vertical pillars - hide when splitting */}
-      {!isSplitting && pillarLines.map((line, i) => (
-        <Line
-          key={`pillar-${i}`}
-          points={line.points}
-          color="#ffffff"
-          lineWidth={1.5}
-          transparent
-          opacity={line.opacity}
-        />
       ))}
     </group>
   );
