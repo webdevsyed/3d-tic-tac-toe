@@ -20,7 +20,7 @@ export function CubeFrame() {
           [-1.5 * CELL_SPACING, y, z],
           [1.5 * CELL_SPACING, y, z],
         ],
-        opacity: i === 0 || i === 3 ? 0.15 : 0.08,
+        opacity: i === 0 || i === 3 ? 0.3 : 0.15,
       });
     }
 
@@ -32,7 +32,7 @@ export function CubeFrame() {
           [x, y, -1.5 * CELL_SPACING],
           [x, y, 1.5 * CELL_SPACING],
         ],
-        opacity: i === 0 || i === 3 ? 0.15 : 0.08,
+        opacity: i === 0 || i === 3 ? 0.3 : 0.15,
       });
     }
   }
@@ -53,7 +53,7 @@ export function CubeFrame() {
         [xOff * CELL_SPACING, topY, zOff * CELL_SPACING],
         [xOff * CELL_SPACING, bottomY, zOff * CELL_SPACING],
       ],
-      opacity: 0.15,
+      opacity: 0.25,
     });
   }
 
@@ -64,7 +64,7 @@ export function CubeFrame() {
           key={i}
           points={line.points}
           color="#ffffff"
-          lineWidth={1}
+          lineWidth={1.5}
           transparent
           opacity={line.opacity}
         />

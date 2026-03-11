@@ -26,21 +26,21 @@ export function PlayerSetup() {
   const playerIds: PlayerID[] = ['P1', 'P2', 'P3'];
 
   return (
-    <div className="absolute inset-0 z-40 flex items-center justify-center bg-void animate-fade-in">
+    <div className="absolute inset-0 z-40 flex items-center justify-center bg-void animate-fade-in overflow-y-auto">
       <div
-        className="absolute inset-0 opacity-20"
+        className="absolute inset-0 opacity-20 pointer-events-none"
         style={{
           background:
             'radial-gradient(ellipse at 50% 40%, #1a0a2e 0%, transparent 60%)',
         }}
       />
 
-      <div className="relative z-10 w-full max-w-sm px-6">
+      <div className="relative z-10 w-full max-w-sm px-6 py-8">
         <h2 className="font-display text-xl font-bold tracking-wider text-center text-white/80 mb-8">
           Enter Player Names
         </h2>
 
-        <div className="flex flex-col gap-4 mb-8">
+        <div className="flex flex-col gap-4 mb-10">
           {playerIds.map((id, i) => (
             <div key={id} className="relative">
               <span

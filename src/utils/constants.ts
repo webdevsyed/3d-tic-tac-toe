@@ -20,7 +20,7 @@ export const PLAYER_LABELS: Record<PlayerID, string> = {
 
 export const CELL_SIZE = 1;
 export const CELL_GAP = 0.15;
-export const LAYER_GAP = 1.4;
+export const LAYER_GAP = 2.2;
 
 // Total spacing between cell centers
 export const CELL_SPACING = CELL_SIZE + CELL_GAP;
@@ -30,7 +30,7 @@ export const SYMBOL_LIGHT_INTENSITY = 0.6;
 export const SYMBOL_LIGHT_DISTANCE = 3;
 
 // Camera defaults
-export const DEFAULT_CAMERA_POSITION: [number, number, number] = [6, 5, 6];
+export const DEFAULT_CAMERA_POSITION: [number, number, number] = [7, 6, 7];
 export const DEFAULT_CAMERA_TARGET: [number, number, number] = [0, 0, 0];
 
 // Grid dimensions

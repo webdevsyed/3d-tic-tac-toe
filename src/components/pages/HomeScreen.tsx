@@ -18,10 +18,10 @@ export function HomeScreen({ onShowHelp }: HomeScreenProps) {
         }}
       />
 
-      <div className="relative z-10 text-center animate-fade-in">
+      <div className="relative z-10 text-center animate-fade-in px-6 w-full max-w-md">
         {/* Title */}
         <div className="mb-12">
-          <h1 className="font-display text-4xl md:text-5xl font-black tracking-wider text-white mb-2">
+          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-black tracking-wider text-white mb-2">
             3D TIC-TAC-TOE
           </h1>
           <p className="font-display text-sm tracking-[0.4em] text-white/30 uppercase">
