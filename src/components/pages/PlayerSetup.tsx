@@ -35,16 +35,16 @@ export function PlayerSetup() {
         }}
       />
 
-      <div className="relative z-10 w-full max-w-sm px-6 py-12">
+      <div className="relative z-10 w-full max-w-xs px-6 py-8">
         <h2 className="font-display text-lg sm:text-xl font-bold tracking-wider text-center text-white/80 mb-6">
           Enter Player Names
         </h2>
 
-        <div className="flex flex-col gap-5 mb-8">
+        <div className="flex flex-col gap-6 mb-10">
           {playerIds.map((id, i) => (
             <div key={id} className="relative">
               <span
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-lg"
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-lg"
                 style={{ color: PLAYER_COLORS[id] }}
               >
                 {PLAYER_SYMBOLS[id]}
@@ -55,7 +55,7 @@ export function PlayerSetup() {
                 placeholder={`Player ${i + 1}`}
                 value={names[i]}
                 onChange={(e) => handleNameChange(i, e.target.value)}
-                className="w-full bg-white/5 border rounded-lg pl-11 pr-4 py-3 text-sm font-mono text-white placeholder-white/20 outline-none focus:bg-white/8 transition-colors"
+                className="w-full bg-white/5 border rounded-lg pl-12 pr-4 py-3 text-sm font-mono text-white placeholder-white/20 outline-none focus:bg-white/8 transition-colors"
                 style={{ borderColor: `${PLAYER_COLORS[id]}33` }}
                 onFocus={(e) => {
                   (e.target as HTMLInputElement).style.borderColor = PLAYER_COLORS[id];
