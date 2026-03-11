@@ -166,8 +166,8 @@ function BoardScene() {
       <OrbitControls
         makeDefault
         enablePan={false}
-        minDistance={5}
-        maxDistance={15}
+        minDistance={4}
+        maxDistance={50}
         enableDamping
         dampingFactor={0.05}
       />

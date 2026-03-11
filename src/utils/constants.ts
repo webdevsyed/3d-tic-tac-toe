@@ -30,7 +30,7 @@ export const SYMBOL_LIGHT_INTENSITY = 0.6;
 export const SYMBOL_LIGHT_DISTANCE = 3;
 
 // Camera defaults
-export const DEFAULT_CAMERA_POSITION: [number, number, number] = [6, 5, 6];
+export const DEFAULT_CAMERA_POSITION: [number, number, number] = [9, 7, 9];
 export const DEFAULT_CAMERA_TARGET: [number, number, number] = [0, 0, 0];
 
 // Grid dimensions
