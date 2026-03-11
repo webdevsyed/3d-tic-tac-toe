@@ -18,7 +18,7 @@ function PlayerBadge({ playerId, isActive }: { playerId: PlayerID; isActive: boo
       <span style={{ color }} className="text-sm font-bold">
         {symbol}
       </span>
-      <span className="text-[10px] font-mono truncate max-w-[60px]">{player.name}</span>
+      <span className="text-[11px] font-mono truncate max-w-[72px]">{player.name}</span>
     </div>
   );
 }
@@ -65,7 +65,7 @@ export function GameHUD() {
       {/* Bottom - move log */}
       {moveHistory.length > 0 && (
         <div className="absolute bottom-3 left-3 right-3 pointer-events-auto">
-          <div className="glass-panel px-3 py-2 flex gap-3 overflow-x-auto text-[10px] font-mono">
+          <div className="glass-panel px-3 py-2 flex gap-3 overflow-x-auto text-[11px] font-mono">
             {moveHistory.slice(-8).map((move, i) => (
               <span key={i} style={{ color: PLAYER_COLORS[move.player] }}>
                 {PLAYER_SYMBOLS[move.player]}({move.cell.join(',')})

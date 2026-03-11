@@ -5,7 +5,7 @@ interface HowToPlayProps {
 export function HowToPlay({ onClose }: HowToPlayProps) {
   return (
     <div className="absolute inset-0 z-[60] flex items-center justify-center bg-void/90 animate-fade-in">
-      <div className="glass-panel max-w-md w-full mx-4 p-6 max-h-[80vh] overflow-y-auto">
+      <div className="glass-panel max-w-md w-full mx-4 p-5 sm:p-6 max-h-[85vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-6">
           <h2 className="font-display text-lg font-bold tracking-wider">How to Play</h2>
           <button

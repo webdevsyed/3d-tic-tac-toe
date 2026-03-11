@@ -22,7 +22,7 @@ export function GameOverOverlay() {
 
   return (
     <div className="absolute inset-0 z-50 flex items-center justify-center bg-void/80 animate-fade-in">
-      <div className="text-center">
+      <div className="text-center px-6 w-full max-w-xs mx-auto">
         {isDraw ? (
           <h2 className="font-display text-3xl font-bold tracking-wider text-white/60 mb-8">
             It's a Draw!
@@ -50,7 +50,7 @@ export function GameOverOverlay() {
         <div className="flex flex-col gap-3">
           <button
             onClick={playAgain}
-            className="btn-neon text-base px-8 py-3"
+            className="btn-neon text-base w-full py-3"
             style={{
               borderColor: winnerColor,
               color: winnerColor,
@@ -60,13 +60,13 @@ export function GameOverOverlay() {
           </button>
           <button
             onClick={handleNewPlayers}
-            className="btn-neon text-sm px-6 py-2"
+            className="btn-neon text-sm w-full py-2"
           >
             New Players
           </button>
           <button
             onClick={resetToHome}
-            className="btn-neon text-sm px-6 py-2 opacity-50 hover:opacity-100"
+            className="btn-neon text-sm w-full py-2 opacity-50 hover:opacity-100"
           >
             Back to Home
           </button>

@@ -18,19 +18,19 @@ export function HomeScreen({ onShowHelp }: HomeScreenProps) {
         }}
       />
 
-      <div className="relative z-10 text-center animate-fade-in px-6 w-full max-w-md">
+      <div className="relative z-10 text-center animate-fade-in px-6 pb-16 w-full max-w-md">
         {/* Title */}
-        <div className="mb-12">
-          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-black tracking-wider text-white mb-2">
+        <div className="mb-8">
+          <h1 className="font-display text-2xl sm:text-3xl md:text-5xl font-black tracking-wider text-white mb-2">
             3D TIC-TAC-TOE
           </h1>
-          <p className="font-display text-sm tracking-[0.4em] text-white/30 uppercase">
+          <p className="font-display text-xs sm:text-sm tracking-[0.4em] text-white/30 uppercase">
             3 Players
           </p>
         </div>
 
         {/* Menu */}
-        <div className="flex flex-col gap-4 w-64 mx-auto">
+        <div className="flex flex-col gap-4 w-full max-w-64 mx-auto">
           <button
             onClick={() => setScreen('setup')}
             className="btn-neon text-base py-4 hover:scale-105 transition-transform"
