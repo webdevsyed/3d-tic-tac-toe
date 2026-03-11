@@ -17,13 +17,12 @@ interface GameActions {
   startTurn: () => void;
   placeMove: (coord: BoardCoord) => void;
   setSliceView: (view: SliceView) => void;
-  setFocusedSlice: (slice: number | null) => void;
   cycleSliceView: () => void;
   playAgain: () => void;
   resetToHome: () => void;
 }
 
-const SLICE_VIEW_ORDER: SliceView[] = ['horizontal', 'vertical-x', 'vertical-z'];
+const SLICE_VIEW_ORDER: SliceView[] = ['none', 'horizontal', 'vertical-x', 'vertical-z'];
 
 export const useGameStore = create<GameState & GameActions>((set, get) => ({
   // Initial state
@@ -38,8 +37,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
   winner: null,
   winningLine: null,
   moveHistory: [],
-  sliceView: 'horizontal',
-  focusedSlice: null,
+  sliceView: 'none',
   startingPlayer: 'P1',
 
   setScreen: (screen) => set({ screen }),
@@ -107,15 +105,13 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     });
   },
 
-  setSliceView: (sliceView) => set({ sliceView, focusedSlice: null }),
-
-  setFocusedSlice: (focusedSlice) => set({ focusedSlice }),
+  setSliceView: (sliceView) => set({ sliceView }),
 
   cycleSliceView: () => {
     const state = get();
     const currentIndex = SLICE_VIEW_ORDER.indexOf(state.sliceView);
     const nextIndex = (currentIndex + 1) % SLICE_VIEW_ORDER.length;
-    set({ sliceView: SLICE_VIEW_ORDER[nextIndex], focusedSlice: null });
+    set({ sliceView: SLICE_VIEW_ORDER[nextIndex] });
   },
 
   playAgain: () => {
@@ -128,8 +124,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       winner: null,
       winningLine: null,
       moveHistory: [],
-      sliceView: 'horizontal',
-      focusedSlice: null,
+      sliceView: 'none',
       screen: 'transitioning',
     });
   },
@@ -142,8 +137,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       winner: null,
       winningLine: null,
       moveHistory: [],
-      sliceView: 'horizontal',
-      focusedSlice: null,
+      sliceView: 'none',
       startingPlayer: 'P1',
     }),
 }));

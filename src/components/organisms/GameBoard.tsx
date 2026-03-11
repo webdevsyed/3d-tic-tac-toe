@@ -10,7 +10,7 @@ import { SymbolX } from '../atoms/SymbolX';
 import { SymbolSphere } from '../atoms/SymbolSphere';
 import { SymbolPyramid } from '../atoms/SymbolPyramid';
 import { GhostPreview } from '../atoms/GhostPreview';
-import { coordToPosition, getCellOpacity, getSliceIndex, getSliceSplitOffset } from '../../utils/boardHelpers';
+import { coordToPosition, getSliceIndex, getSliceSplitOffset } from '../../utils/boardHelpers';
 import { DEFAULT_CAMERA_POSITION } from '../../utils/constants';
 import type { BoardCoord, PlayerID, SliceView } from '../../types/game';
 
@@ -20,16 +20,14 @@ import type { BoardCoord, PlayerID, SliceView } from '../../types/game';
 function AnimatedSliceGroup({
   sliceIndex,
   sliceView,
-  focusedSlice,
   children,
 }: {
   sliceIndex: number;
   sliceView: SliceView;
-  focusedSlice: number | null;
   children: React.ReactNode;
 }) {
   const groupRef = useRef<Group>(null);
-  const targetOffset = getSliceSplitOffset(sliceIndex, sliceView, focusedSlice);
+  const targetOffset = getSliceSplitOffset(sliceIndex, sliceView);
 
   useFrame((_, delta) => {
     if (!groupRef.current) return;
@@ -49,7 +47,6 @@ function BoardScene() {
   const winner = useGameStore((s) => s.winner);
   const winningLine = useGameStore((s) => s.winningLine);
   const sliceView = useGameStore((s) => s.sliceView);
-  const focusedSlice = useGameStore((s) => s.focusedSlice);
   const placeMove = useGameStore((s) => s.placeMove);
 
   const [hoveredCoord, setHoveredCoord] = useState<BoardCoord | null>(null);
@@ -104,14 +101,14 @@ function BoardScene() {
 
   return (
     <>
-      {/* Lighting — boosted for better visibility */}
+      {/* Lighting */}
       <ambientLight intensity={1.0} />
       <directionalLight position={[5, 8, 5]} intensity={1.8} />
       <directionalLight position={[-4, -2, -3]} intensity={0.6} />
       <pointLight position={[0, 6, 0]} intensity={1.2} distance={20} />
 
       {/* Cube wireframe with split support */}
-      <CubeFrame sliceView={sliceView} focusedSlice={focusedSlice} />
+      <CubeFrame sliceView={sliceView} />
 
       {/* Cells grouped by slice for animated splitting */}
       {Array.from(sliceGroups.entries()).map(([si, cells]) => (
@@ -119,11 +116,9 @@ function BoardScene() {
           key={`slice-${si}`}
           sliceIndex={si}
           sliceView={sliceView}
-          focusedSlice={focusedSlice}
         >
           {cells.map(({ coord, li, ri, ci, cellValue }) => {
             const position = coordToPosition(coord);
-            const opacity = getCellOpacity(coord, sliceView, focusedSlice);
             const isHovered =
               hoveredCoord &&
               hoveredCoord[0] === li &&
@@ -138,13 +133,12 @@ function BoardScene() {
                   occupied={cellValue !== null}
                   occupiedBy={cellValue}
                   currentPlayer={currentTurn}
-                  isInteractive={isInteractive && opacity > 0.5}
-                  opacity={opacity}
+                  isInteractive={isInteractive}
                   onPlace={placeMove}
                   onHover={handleHover}
                 />
                 {cellValue && renderSymbol(cellValue, position, coord)}
-                {isHovered && !cellValue && isInteractive && opacity > 0.5 && (
+                {isHovered && !cellValue && isInteractive && (
                   <GhostPreview position={position} player={currentTurn} />
                 )}
               </group>

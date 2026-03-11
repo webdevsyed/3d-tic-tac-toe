@@ -9,7 +9,6 @@ interface CellProps {
   occupiedBy: PlayerID | null;
   currentPlayer: PlayerID;
   isInteractive: boolean;
-  opacity?: number;
   onPlace: (coord: BoardCoord) => void;
   onHover: (coord: BoardCoord | null) => void;
 }
@@ -21,7 +20,6 @@ export function Cell({
   occupiedBy,
   currentPlayer,
   isInteractive,
-  opacity = 1,
   onPlace,
   onHover,
 }: CellProps) {
@@ -66,7 +64,7 @@ export function Cell({
           <meshBasicMaterial
             color={showHighlight ? playerColor : '#ffffff'}
             transparent
-            opacity={showHighlight ? 0.6 * opacity : 0.15 * opacity}
+            opacity={showHighlight ? 0.6 : 0.15}
           />
         </mesh>
       )}
@@ -78,7 +76,7 @@ export function Cell({
           <meshBasicMaterial
             color={playerColor}
             transparent
-            opacity={0.08 * opacity}
+            opacity={0.08}
           />
         </mesh>
       )}
@@ -90,7 +88,7 @@ export function Cell({
           <meshBasicMaterial
             color={occupiedColor}
             transparent
-            opacity={0.06 * opacity}
+            opacity={0.06}
           />
         </mesh>
       )}

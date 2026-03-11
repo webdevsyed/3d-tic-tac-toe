@@ -8,25 +8,25 @@ import type { SliceView } from '../../types/game';
 
 interface CubeFrameProps {
   sliceView: SliceView;
-  focusedSlice: number | null;
 }
 
 /**
- * Animated group for a single layer's grid lines + floor plane.
+ * Animated group for a single layer's grid lines + box enclosure.
  */
 function AnimatedLayerGrid({
   layerIndex,
   sliceView,
-  focusedSlice,
   children,
 }: {
   layerIndex: number;
   sliceView: SliceView;
-  focusedSlice: number | null;
   children: React.ReactNode;
 }) {
   const groupRef = useRef<THREE.Group>(null);
-  const targetOffset = getSliceSplitOffset(layerIndex, sliceView, focusedSlice);
+  // Only animate horizontal splits for the grid structure
+  const targetOffset = sliceView === 'horizontal'
+    ? getSliceSplitOffset(layerIndex, sliceView)
+    : [0, 0, 0] as [number, number, number];
 
   useFrame((_, delta) => {
     if (!groupRef.current) return;
@@ -41,15 +41,15 @@ function AnimatedLayerGrid({
 
 /**
  * Renders the wireframe structure of the 3×3×3 cube with:
- * - Grid lines for each layer (animated split on slice focus)
- * - Semi-transparent floor planes for depth/shading
- * - Vertical corner pillars (hidden when split)
+ * - Grid lines for each layer (animated split on horizontal view)
+ * - Semi-transparent box enclosures for depth
+ * - Vertical corner pillars (hidden when splitting)
  */
-export function CubeFrame({ sliceView, focusedSlice }: CubeFrameProps) {
+export function CubeFrame({ sliceView }: CubeFrameProps) {
   const half = 1.5 * CELL_SPACING;
-  const isSplitting = focusedSlice !== null && sliceView === 'horizontal';
+  const isSplitting = sliceView !== 'none';
 
-  // Build per-layer grid lines (memoized — only depends on constants)
+  // Build per-layer grid lines (memoized)
   const layers = useMemo(() => [0, 1, 2].map((layer) => {
     const y = (1 - layer) * LAYER_GAP;
     const lines: Array<{ points: [number, number, number][]; opacity: number }> = [];
@@ -91,42 +91,36 @@ export function CubeFrame({ sliceView, focusedSlice }: CubeFrameProps) {
 
   return (
     <group>
-      {layers.map(({ layer, y, lines }) => {
-        const isFocused = isSplitting && layer === focusedSlice;
-        const isDimmed = isSplitting && layer !== focusedSlice;
+      {layers.map(({ layer, y, lines }) => (
+        <AnimatedLayerGrid
+          key={`layer-${layer}`}
+          layerIndex={layer}
+          sliceView={sliceView}
+        >
+          {lines.map((line, i) => (
+            <Line
+              key={i}
+              points={line.points}
+              color="#ffffff"
+              lineWidth={1.5}
+              transparent
+              opacity={line.opacity}
+            />
+          ))}
 
-        return (
-          <AnimatedLayerGrid
-            key={`layer-${layer}`}
-            layerIndex={layer}
-            sliceView={sliceView}
-            focusedSlice={sliceView === 'horizontal' ? focusedSlice : null}
-          >
-            {lines.map((line, i) => (
-              <Line
-                key={i}
-                points={line.points}
-                color="#ffffff"
-                lineWidth={1.5}
-                transparent
-                opacity={isDimmed ? line.opacity * 0.3 : line.opacity}
-              />
-            ))}
-
-            {/* Semi-transparent box enclosure for this layer */}
-            <mesh position={[0, y, 0]}>
-              <boxGeometry args={[half * 2, LAYER_GAP * 0.85, half * 2]} />
-              <meshStandardMaterial
-                color="#8888ff"
-                transparent
-                opacity={isFocused ? 0.08 : 0.04}
-                side={THREE.BackSide}
-                depthWrite={false}
-              />
-            </mesh>
-          </AnimatedLayerGrid>
-        );
-      })}
+          {/* Semi-transparent box enclosure for this layer */}
+          <mesh position={[0, y, 0]}>
+            <boxGeometry args={[half * 2, LAYER_GAP * 0.85, half * 2]} />
+            <meshStandardMaterial
+              color="#8888ff"
+              transparent
+              opacity={0.04}
+              side={THREE.BackSide}
+              depthWrite={false}
+            />
+          </mesh>
+        </AnimatedLayerGrid>
+      ))}
 
       {/* Vertical pillars - hide when splitting */}
       {!isSplitting && pillarLines.map((line, i) => (

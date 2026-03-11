@@ -21,13 +21,13 @@ export function SymbolX({ position, dimmed = false, highlighted = false }: Symbo
   const color = PLAYER_COLORS.P1;
   const opacity = dimmed ? 0.3 : 1;
   const lightIntensity = highlighted ? SYMBOL_LIGHT_INTENSITY * 3 : SYMBOL_LIGHT_INTENSITY;
-  // Bar long in X, thin in Y and Z — rotated around Y to form an X visible from all angles
-  const barSize: [number, number, number] = [0.5, 0.07, 0.07];
+  // Chunky bars visible from all angles — thick enough in all dimensions
+  const barSize: [number, number, number] = [0.5, 0.09, 0.09];
 
   return (
     <group ref={groupRef} position={position}>
-      {/* Bar 1 - diagonal (Z-axis rotation for consistent X shape from all angles) */}
-      <mesh rotation={[0, 0, Math.PI / 4]}>
+      {/* Bar 1 - diagonal, tilted on Y so it's never edge-on */}
+      <mesh rotation={[0, Math.PI / 4, Math.PI / 4]}>
         <boxGeometry args={barSize} />
         <meshStandardMaterial
           color={color}
@@ -38,8 +38,8 @@ export function SymbolX({ position, dimmed = false, highlighted = false }: Symbo
           opacity={opacity}
         />
       </mesh>
-      {/* Bar 2 - other diagonal */}
-      <mesh rotation={[0, 0, -Math.PI / 4]}>
+      {/* Bar 2 - other diagonal, tilted opposite on Y */}
+      <mesh rotation={[0, -Math.PI / 4, -Math.PI / 4]}>
         <boxGeometry args={barSize} />
         <meshStandardMaterial
           color={color}

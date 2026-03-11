@@ -14,39 +14,12 @@ export function coordToPosition(coord: BoardCoord): [number, number, number] {
 }
 
 /**
- * Determine the opacity for a cell based on the current slice view and focus.
- * Returns 1 for visible cells, ~0.1 for faded cells.
- */
-export function getCellOpacity(
-  coord: BoardCoord,
-  sliceView: SliceView,
-  focusedSlice: number | null
-): number {
-  if (focusedSlice === null) return 1;
-
-  const [layer, row, col] = coord;
-
-  let sliceIndex: number;
-  switch (sliceView) {
-    case 'horizontal':
-      sliceIndex = layer;
-      break;
-    case 'vertical-x':
-      sliceIndex = col;
-      break;
-    case 'vertical-z':
-      sliceIndex = row;
-      break;
-  }
-
-  return sliceIndex === focusedSlice ? 1 : 0.1;
-}
-
-/**
  * Get the slice index for a given coordinate based on the active slice view.
  */
 export function getSliceIndex(coord: BoardCoord, sliceView: SliceView): number {
   switch (sliceView) {
+    case 'none':
+      return 0; // all cells in one group
     case 'horizontal':
       return coord[0]; // layer
     case 'vertical-x':
@@ -57,25 +30,23 @@ export function getSliceIndex(coord: BoardCoord, sliceView: SliceView): number {
 }
 
 /**
- * Compute the target split offset for a slice when a specific slice is focused.
- * Unfocused slices move away; focused slice stays centered.
+ * Compute the split offset for a slice. All 3 slices spread apart equally
+ * when a split direction is active. Slice 0 goes negative, 1 stays center, 2 goes positive.
  */
 export function getSliceSplitOffset(
   sliceIndex: number,
   sliceView: SliceView,
-  focusedSlice: number | null
 ): [number, number, number] {
-  if (focusedSlice === null) return [0, 0, 0];
+  if (sliceView === 'none') return [0, 0, 0];
 
-  const SPLIT_DISTANCE = 1.5;
-  const diff = sliceIndex - focusedSlice;
-  if (diff === 0) return [0, 0, 0];
-
-  const offset = diff > 0 ? SPLIT_DISTANCE : -SPLIT_DISTANCE;
+  const SPLIT_DISTANCE = 1.8;
+  // sliceIndex 0 → -1, sliceIndex 1 → 0, sliceIndex 2 → +1
+  const direction = sliceIndex - 1;
+  const offset = direction * SPLIT_DISTANCE;
 
   switch (sliceView) {
     case 'horizontal':
-      return [0, -offset, 0]; // layers split on Y (inverted because layer 0 = top)
+      return [0, -offset, 0]; // layers split on Y (inverted: layer 0 = top)
     case 'vertical-x':
       return [offset, 0, 0]; // cols split on X
     case 'vertical-z':
