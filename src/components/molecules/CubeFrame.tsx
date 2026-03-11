@@ -58,7 +58,7 @@ export function CubeFrame({ sliceView, focusedSlice }: CubeFrameProps) {
       const z = (i - 1.5) * CELL_SPACING;
       lines.push({
         points: [[-half, y, z], [half, y, z]],
-        opacity: i === 0 || i === 3 ? 0.3 : 0.15,
+        opacity: i === 0 || i === 3 ? 0.45 : 0.25,
       });
     }
 
@@ -66,7 +66,7 @@ export function CubeFrame({ sliceView, focusedSlice }: CubeFrameProps) {
       const x = (i - 1.5) * CELL_SPACING;
       lines.push({
         points: [[x, y, -half], [x, y, half]],
-        opacity: i === 0 || i === 3 ? 0.3 : 0.15,
+        opacity: i === 0 || i === 3 ? 0.45 : 0.25,
       });
     }
 
@@ -83,7 +83,7 @@ export function CubeFrame({ sliceView, focusedSlice }: CubeFrameProps) {
           [xOff * CELL_SPACING, LAYER_GAP, zOff * CELL_SPACING],
           [xOff * CELL_SPACING, -LAYER_GAP, zOff * CELL_SPACING],
         ],
-        opacity: 0.25,
+        opacity: 0.35,
       });
     }
     return lines;
@@ -119,7 +119,7 @@ export function CubeFrame({ sliceView, focusedSlice }: CubeFrameProps) {
               <meshStandardMaterial
                 color="#8888ff"
                 transparent
-                opacity={isFocused ? 0.05 : 0.02}
+                opacity={isFocused ? 0.08 : 0.04}
                 side={THREE.BackSide}
                 depthWrite={false}
               />

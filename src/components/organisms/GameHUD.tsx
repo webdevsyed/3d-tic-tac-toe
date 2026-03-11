@@ -37,7 +37,7 @@ export function GameHUD() {
     <div className="absolute inset-0 pointer-events-none">
       {/* Top bar - players + turn indicator */}
       <div className="flex flex-col gap-2 p-3 pb-0 pointer-events-auto safe-area-top">
-        <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <div className="glass-panel flex items-center gap-0.5 p-1 shrink min-w-0">
             {(['P1', 'P2', 'P3'] as PlayerID[]).map((id) => (
               <PlayerBadge key={id} playerId={id} isActive={currentTurn === id} />
@@ -46,7 +46,7 @@ export function GameHUD() {
 
           {screen === 'playing' && (
             <div
-              className="glass-panel px-3 py-1.5 font-display text-xs tracking-wider whitespace-nowrap shrink-0"
+              className="glass-panel px-3 py-1.5 font-display text-xs tracking-wider whitespace-nowrap"
               style={{ color: currentColor }}
             >
               {players[currentTurn].name}'s Turn
