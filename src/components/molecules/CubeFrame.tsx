@@ -110,14 +110,14 @@ export function CubeFrame({ sliceView, focusedSlice }: CubeFrameProps) {
               />
             ))}
 
-            {/* Semi-transparent floor plane for depth */}
-            <mesh position={[0, y, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-              <planeGeometry args={[half * 2, half * 2]} />
+            {/* Semi-transparent box enclosure for this layer */}
+            <mesh position={[0, y, 0]}>
+              <boxGeometry args={[half * 2, LAYER_GAP * 0.85, half * 2]} />
               <meshStandardMaterial
-                color="#ffffff"
+                color="#8888ff"
                 transparent
-                opacity={isFocused ? 0.06 : 0.025}
-                side={THREE.DoubleSide}
+                opacity={isFocused ? 0.05 : 0.02}
+                side={THREE.BackSide}
                 depthWrite={false}
               />
             </mesh>
