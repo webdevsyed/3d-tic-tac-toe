@@ -1,0 +1,75 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@import "tailwindcss";
+
+@theme {
+  --color-void: #0A0A0F;
+  --color-void-light: #12121A;
+  --color-void-lighter: #1A1A2E;
+  --color-crimson: #FF3D3D;
+  --color-electric: #3D8BFF;
+  --color-emerald: #2DD881;
+  --color-neon-border: rgba(255, 255, 255, 0.08);
+  --color-glass: rgba(255, 255, 255, 0.04);
+  --color-glass-hover: rgba(255, 255, 255, 0.08);
+  --font-display: 'Orbitron', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--color-void);
+  color: white;
+  font-family: var(--font-mono);
+}
+
+.glass-panel {
+  background: var(--color-glass);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--color-neon-border);
+  border-radius: 12px;
+}
+
+.glow-crimson { text-shadow: 0 0 20px rgba(255, 61, 61, 0.5); }
+.glow-electric { text-shadow: 0 0 20px rgba(61, 139, 255, 0.5); }
+.glow-emerald { text-shadow: 0 0 20px rgba(45, 216, 129, 0.5); }
+
+.glow-box-crimson { box-shadow: 0 0 20px rgba(255, 61, 61, 0.3), inset 0 0 20px rgba(255, 61, 61, 0.05); }
+.glow-box-electric { box-shadow: 0 0 20px rgba(61, 139, 255, 0.3), inset 0 0 20px rgba(61, 139, 255, 0.05); }
+.glow-box-emerald { box-shadow: 0 0 20px rgba(45, 216, 129, 0.3), inset 0 0 20px rgba(45, 216, 129, 0.05); }
+
+.btn-neon {
+  font-family: var(--font-display);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 12px 32px;
+  border: 1px solid var(--color-neon-border);
+  background: var(--color-glass);
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-neon:hover {
+  background: var(--color-glass-hover);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.4s ease-out;
+}

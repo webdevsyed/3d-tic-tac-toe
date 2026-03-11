@@ -627,28 +627,28 @@ Since this is a **pure static site** (no server), Netlify deployment is straight
 
 These features are **not in scope** for the initial build but are planned for future iterations:
 
-### v2: Online Multiplayer
+### v2: Enhanced Interactions
+- Two-finger spread gesture to split cube along nearest axis
+- Haptic feedback on mobile
+- Sound effects
+- localStorage game persistence (resume after refresh)
+- Game replay / move-by-move playback
+
+### v3: Online Multiplayer
 - Add Socket.io backend (Express + Node.js)
 - Room-code system (create/join with 4-char codes)
 - Server-authoritative game state
 - Reconnection handling
 - Deploy backend to Fly.io or Railway
 - Turn timer (30 seconds)
+- Spectator mode
 
-### v3: AI Opponent
+### v4: AI Opponent
 - Single-player mode (play against AI)
 - AI difficulty levels:
   - Easy: Random moves
   - Medium: Blocks obvious wins, takes winning moves
   - Hard: Minimax or similar algorithm adapted for 3-player
-
-### v4: Enhanced Interactions
-- Two-finger spread gesture to split cube along nearest axis
-- Haptic feedback on mobile
-- Sound effects
-- localStorage game persistence (resume after refresh)
-- Spectator mode for online games
-- Game replay / move-by-move playback
 
 ---
 
