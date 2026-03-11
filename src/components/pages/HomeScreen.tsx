@@ -33,7 +33,7 @@ export function HomeScreen({ onShowHelp }: HomeScreenProps) {
         <div className="flex flex-col items-center gap-4 w-full max-w-64 mx-auto">
           <button
             onClick={() => setScreen('setup')}
-            className="btn-neon text-base py-4 hover:scale-105 transition-transform"
+            className="btn-neon text-base py-4 w-full hover:scale-105 transition-transform"
             style={{
               borderColor: 'rgba(61, 139, 255, 0.3)',
               boxShadow: '0 0 30px rgba(61, 139, 255, 0.1)',
@@ -43,7 +43,7 @@ export function HomeScreen({ onShowHelp }: HomeScreenProps) {
           </button>
           <button
             onClick={onShowHelp}
-            className="btn-neon text-sm py-3 opacity-60 hover:opacity-100"
+            className="btn-neon text-sm py-3 w-full opacity-60 hover:opacity-100"
           >
             How to Play
           </button>
