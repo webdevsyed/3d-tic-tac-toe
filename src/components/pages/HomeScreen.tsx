@@ -9,7 +9,7 @@ export function HomeScreen({ onShowHelp }: HomeScreenProps) {
   const setScreen = useGameStore((s) => s.setScreen);
 
   return (
-    <div className="absolute inset-0 z-40 flex flex-col items-center justify-center bg-void">
+    <div className="absolute inset-0 z-40 bg-void overflow-y-auto">
       {/* Animated background gradient */}
       <div
         className="absolute inset-0 opacity-30"
@@ -22,7 +22,8 @@ export function HomeScreen({ onShowHelp }: HomeScreenProps) {
       {/* Rotating wireframe cubes */}
       <BackgroundCubes />
 
-      <div className="relative z-10 text-center animate-fade-in px-6 pb-16 w-full max-w-md">
+      <div className="min-h-full flex flex-col items-center justify-center px-6 pb-16">
+        <div className="relative z-10 text-center animate-fade-in w-full max-w-md">
         {/* Title */}
         <div className="mb-8">
           <h1 className="font-display text-2xl sm:text-3xl md:text-5xl font-black tracking-wider text-white mb-2">
@@ -51,6 +52,7 @@ export function HomeScreen({ onShowHelp }: HomeScreenProps) {
           >
             How to Play
           </button>
+        </div>
         </div>
       </div>
     </div>

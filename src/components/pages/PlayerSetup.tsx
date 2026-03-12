@@ -27,7 +27,7 @@ export function PlayerSetup() {
   const playerIds: PlayerID[] = ['P1', 'P2', 'P3'];
 
   return (
-    <div className="absolute inset-0 z-40 flex items-center justify-center bg-void animate-fade-in overflow-y-auto">
+    <div className="absolute inset-0 z-40 bg-void animate-fade-in overflow-y-auto">
       <div
         className="absolute inset-0 opacity-20 pointer-events-none"
         style={{
@@ -38,7 +38,8 @@ export function PlayerSetup() {
 
       <BackgroundCubes />
 
-      <div className="relative z-10 w-full max-w-xs px-6 py-8">
+      <div className="min-h-full flex items-center justify-center px-6 py-8">
+        <div className="relative z-10 w-full max-w-xs">
         <h2 className="font-display text-lg sm:text-xl font-bold tracking-wider text-center text-white/80 mb-6">
           Enter Player Names
         </h2>
@@ -88,6 +89,7 @@ export function PlayerSetup() {
           >
             Back
           </button>
+        </div>
         </div>
       </div>
     </div>
