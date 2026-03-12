@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useGameStore } from '../../stores/gameStore';
 import { PLAYER_COLORS, PLAYER_SYMBOLS } from '../../utils/constants';
+import { BackgroundCubes } from '../atoms/BackgroundCubes';
 import type { PlayerID } from '../../types/game';
 
 export function PlayerSetup() {
@@ -35,12 +36,14 @@ export function PlayerSetup() {
         }}
       />
 
+      <BackgroundCubes />
+
       <div className="relative z-10 w-full max-w-xs px-6 py-8">
         <h2 className="font-display text-lg sm:text-xl font-bold tracking-wider text-center text-white/80 mb-6">
           Enter Player Names
         </h2>
 
-        <div className="flex flex-col gap-6 mb-10">
+        <div className="flex flex-col gap-4 sm:gap-6 mb-8">
           {playerIds.map((id, i) => (
             <div key={id} className="relative">
               <span
