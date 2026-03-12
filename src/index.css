@@ -97,3 +97,34 @@ body, #root {
 .animate-fade-in {
   animation: fade-in 0.4s ease-out;
 }
+
+/* Rotating background cubes */
+.bg-cube {
+  position: absolute;
+  transform-style: preserve-3d;
+  animation: cube-spin linear infinite;
+}
+
+.bg-cube .face {
+  position: absolute;
+  border: 1.5px solid currentColor;
+  background: transparent;
+  border-radius: 2px;
+}
+
+.bg-cube .face-front  { transform: translateZ(calc(var(--size) / 2)); }
+.bg-cube .face-back   { transform: translateZ(calc(var(--size) / -2)) rotateY(180deg); }
+.bg-cube .face-left   { transform: translateX(calc(var(--size) / -2)) rotateY(-90deg); }
+.bg-cube .face-right  { transform: translateX(calc(var(--size) / 2)) rotateY(90deg); }
+.bg-cube .face-top    { transform: translateY(calc(var(--size) / -2)) rotateX(90deg); }
+.bg-cube .face-bottom { transform: translateY(calc(var(--size) / 2)) rotateX(-90deg); }
+
+@keyframes cube-spin {
+  from { transform: rotateX(0deg) rotateY(0deg); }
+  to   { transform: rotateX(360deg) rotateY(360deg); }
+}
+
+@keyframes cube-spin-reverse {
+  from { transform: rotateX(360deg) rotateY(0deg); }
+  to   { transform: rotateX(0deg) rotateY(360deg); }
+}
