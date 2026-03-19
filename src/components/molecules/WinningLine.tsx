@@ -3,20 +3,12 @@ import { useFrame } from '@react-three/fiber';
 import { useRef } from 'react';
 import * as THREE from 'three';
 import type { BoardCoord, PlayerID } from '../../types/game';
-import { CELL_SPACING, LAYER_GAP, PLAYER_COLORS } from '../../utils/constants';
+import { PLAYER_COLORS } from '../../utils/constants';
+import { coordToPosition } from '../../utils/boardHelpers';
 
 interface WinningLineProps {
   line: BoardCoord[];
   winner: PlayerID;
-}
-
-function coordToPosition(coord: BoardCoord): [number, number, number] {
-  const [layer, row, col] = coord;
-  return [
-    (col - 1) * CELL_SPACING,
-    (1 - layer) * LAYER_GAP,
-    (row - 1) * CELL_SPACING,
-  ];
 }
 
 export function WinningLine({ line, winner }: WinningLineProps) {

@@ -22,37 +22,37 @@ export function HomeScreen({ onShowHelp }: HomeScreenProps) {
       {/* Rotating wireframe cubes */}
       <BackgroundCubes />
 
-      <div className="min-h-full flex flex-col items-center justify-center px-6 pb-16">
-        <div className="relative z-10 text-center animate-fade-in w-full max-w-md">
-        {/* Title */}
-        <div className="mb-8">
-          <h1 className="font-display text-2xl sm:text-3xl md:text-5xl font-black tracking-wider text-white mb-2">
-            3D TIC-TAC-TOE
-          </h1>
-          <p className="font-display text-xs sm:text-sm tracking-[0.4em] text-white/30 uppercase">
-            3 Players
-          </p>
-        </div>
+      <div className="min-h-full flex flex-col items-center justify-center px-8 sm:px-10">
+        <div className="relative z-10 text-center animate-fade-in w-full max-w-xs sm:max-w-sm mx-auto">
+          {/* Title */}
+          <div className="mb-14 sm:mb-16">
+            <h1 className="font-display font-black tracking-wider text-white mb-3 whitespace-nowrap" style={{ fontSize: 'clamp(1.5rem, 5vw, 3rem)' }}>
+              3D TIC-TAC-TOE
+            </h1>
+            <p className="font-display text-xs sm:text-sm tracking-[0.4em] text-white/50 uppercase">
+              3 Players
+            </p>
+          </div>
 
-        {/* Menu */}
-        <div className="flex flex-col items-center gap-4 w-full max-w-64 mx-auto">
-          <button
-            onClick={() => setScreen('setup')}
-            className="btn-neon text-base py-4 w-full hover:scale-105 transition-transform"
-            style={{
-              borderColor: 'rgba(61, 139, 255, 0.3)',
-              boxShadow: '0 0 30px rgba(61, 139, 255, 0.1)',
-            }}
-          >
-            New Game
-          </button>
-          <button
-            onClick={onShowHelp}
-            className="btn-neon text-sm py-3 w-full opacity-60 hover:opacity-100"
-          >
-            How to Play
-          </button>
-        </div>
+          {/* Menu */}
+          <div className="flex flex-col gap-4 sm:gap-5">
+            <button
+              onClick={() => setScreen('setup')}
+              className="btn-neon text-base py-4 w-full hover:scale-105 transition-transform"
+              style={{
+                borderColor: 'rgba(61, 139, 255, 0.3)',
+                boxShadow: '0 0 30px rgba(61, 139, 255, 0.1)',
+              }}
+            >
+              New Game
+            </button>
+            <button
+              onClick={onShowHelp}
+              className="btn-neon text-sm py-3 w-full opacity-70 hover:opacity-100"
+            >
+              How to Play
+            </button>
+          </div>
         </div>
       </div>
     </div>

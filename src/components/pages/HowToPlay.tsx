@@ -5,20 +5,21 @@ interface HowToPlayProps {
 export function HowToPlay({ onClose }: HowToPlayProps) {
   return (
     <div className="absolute inset-0 z-[60] flex items-center justify-center bg-void/90 animate-fade-in">
-      <div className="glass-panel max-w-md w-full mx-4 p-5 sm:p-6 max-h-[85vh] overflow-y-auto">
+      <div className="glass-panel max-w-md w-full mx-5 p-5 sm:p-6 max-h-[85vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-6">
           <h2 className="font-display text-lg font-bold tracking-wider">How to Play</h2>
           <button
             onClick={onClose}
-            className="text-white/40 hover:text-white text-xl leading-none"
+            className="text-white/50 hover:text-white text-xl leading-none w-10 h-10 flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors"
+            aria-label="Close"
           >
             &times;
           </button>
         </div>
 
-        <div className="flex flex-col gap-5 text-sm text-white/70">
-          <section>
-            <h3 className="font-display text-xs font-bold tracking-wider text-white/50 uppercase mb-2">
+        <div className="flex flex-col gap-0 text-sm text-white/70">
+          <section className="pb-4 mb-4 border-b border-white/8">
+            <h3 className="font-display text-xs font-bold tracking-wider text-white/70 uppercase mb-2">
               The Board
             </h3>
             <p>
@@ -27,8 +28,8 @@ export function HowToPlay({ onClose }: HowToPlayProps) {
             </p>
           </section>
 
-          <section>
-            <h3 className="font-display text-xs font-bold tracking-wider text-white/50 uppercase mb-2">
+          <section className="pb-4 mb-4 border-b border-white/8">
+            <h3 className="font-display text-xs font-bold tracking-wider text-white/70 uppercase mb-2">
               Players
             </h3>
             <p>
@@ -41,8 +42,8 @@ export function HowToPlay({ onClose }: HowToPlayProps) {
             </div>
           </section>
 
-          <section>
-            <h3 className="font-display text-xs font-bold tracking-wider text-white/50 uppercase mb-2">
+          <section className="pb-4 mb-4 border-b border-white/8">
+            <h3 className="font-display text-xs font-bold tracking-wider text-white/70 uppercase mb-2">
               Winning
             </h3>
             <p>
@@ -51,8 +52,8 @@ export function HowToPlay({ onClose }: HowToPlayProps) {
             </p>
           </section>
 
-          <section>
-            <h3 className="font-display text-xs font-bold tracking-wider text-white/50 uppercase mb-2">
+          <section className="pb-4 mb-4 border-b border-white/8">
+            <h3 className="font-display text-xs font-bold tracking-wider text-white/70 uppercase mb-2">
               Controls
             </h3>
             <p>
@@ -63,7 +64,7 @@ export function HowToPlay({ onClose }: HowToPlayProps) {
           </section>
 
           <section>
-            <h3 className="font-display text-xs font-bold tracking-wider text-white/50 uppercase mb-2">
+            <h3 className="font-display text-xs font-bold tracking-wider text-white/70 uppercase mb-2">
               Slice Views
             </h3>
             <p>
@@ -76,6 +77,10 @@ export function HowToPlay({ onClose }: HowToPlayProps) {
         <button
           onClick={onClose}
           className="btn-neon w-full mt-6 text-sm"
+          style={{
+            borderColor: 'rgba(61, 139, 255, 0.4)',
+            color: '#3D8BFF',
+          }}
         >
           Got It
         </button>

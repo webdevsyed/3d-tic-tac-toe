@@ -22,18 +22,18 @@ export function GameOverOverlay() {
 
   return (
     <div className="absolute inset-0 z-50 flex items-center justify-center bg-void/80 animate-fade-in">
-      <div className="text-center px-6 w-full max-w-xs mx-auto">
+      <div className="text-center px-8 w-full max-w-xs sm:max-w-sm mx-auto">
         {isDraw ? (
-          <h2 className="font-display text-3xl font-bold tracking-wider text-white/60 mb-8">
+          <h2 className="font-display text-3xl font-bold tracking-wider text-white/60 mb-10">
             It's a Draw!
           </h2>
         ) : (
           <>
-            <div className="text-6xl mb-4" style={{ color: winnerColor }}>
+            <div className="text-6xl mb-5" style={{ color: winnerColor }}>
               {winnerSymbol}
             </div>
             <h2
-              className="font-display text-3xl font-bold tracking-wider mb-2"
+              className="font-display text-3xl font-bold tracking-wider mb-3"
               style={{
                 color: winnerColor,
                 textShadow: `0 0 30px ${winnerColor}66`,
@@ -41,13 +41,13 @@ export function GameOverOverlay() {
             >
               {winnerName} Wins!
             </h2>
-            <p className="text-white/30 text-sm mb-8">
+            <p className="text-white/50 text-sm mb-10">
               Congratulations!
             </p>
           </>
         )}
 
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 sm:gap-4">
           <button
             onClick={playAgain}
             className="btn-neon text-base w-full py-3"
@@ -66,7 +66,7 @@ export function GameOverOverlay() {
           </button>
           <button
             onClick={resetToHome}
-            className="btn-neon text-sm w-full py-2 opacity-50 hover:opacity-100"
+            className="btn-neon text-sm w-full py-2 opacity-60 hover:opacity-100"
           >
             Back to Home
           </button>

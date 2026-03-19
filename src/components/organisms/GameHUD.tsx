@@ -28,6 +28,7 @@ export function GameHUD() {
   const players = useGameStore((s) => s.players);
   const moveHistory = useGameStore((s) => s.moveHistory);
   const screen = useGameStore((s) => s.screen);
+  const resetToHome = useGameStore((s) => s.resetToHome);
 
   if (screen !== 'playing' && screen !== 'finished') return null;
 
@@ -37,10 +38,22 @@ export function GameHUD() {
     <div className="absolute inset-0 pointer-events-none">
       {/* Top bar - players + turn indicator */}
       <div className="flex flex-col items-center gap-2 p-3 pb-0 pointer-events-auto safe-area-top">
-        <div className="glass-panel flex items-center gap-0.5 p-1">
-          {(['P1', 'P2', 'P3'] as PlayerID[]).map((id) => (
-            <PlayerBadge key={id} playerId={id} isActive={currentTurn === id} />
-          ))}
+        <div className="flex items-center gap-2">
+          <div className="glass-panel flex items-center gap-0.5 p-1">
+            {(['P1', 'P2', 'P3'] as PlayerID[]).map((id) => (
+              <PlayerBadge key={id} playerId={id} isActive={currentTurn === id} />
+            ))}
+          </div>
+          {screen === 'playing' && (
+            <button
+              onClick={resetToHome}
+              className="glass-panel w-9 h-9 flex items-center justify-center text-white/40 hover:text-white hover:bg-white/10 transition-colors rounded-lg text-sm"
+              aria-label="Exit to home"
+              title="Exit to home"
+            >
+              ✕
+            </button>
+          )}
         </div>
 
         {screen === 'playing' && (
@@ -53,15 +66,17 @@ export function GameHUD() {
         )}
       </div>
 
-      {/* Bottom - slice controls */}
-      <div className="absolute bottom-16 left-1/2 -translate-x-1/2 pointer-events-auto safe-area-bottom">
-        <div className="glass-panel p-2">
-          <SliceControls />
+      {/* Bottom - slice controls (hidden when game is finished) */}
+      {screen === 'playing' && (
+        <div className="absolute bottom-16 left-1/2 -translate-x-1/2 pointer-events-auto safe-area-bottom">
+          <div className="glass-panel p-2">
+            <SliceControls />
+          </div>
         </div>
-      </div>
+      )}
 
-      {/* Bottom - move log */}
-      {moveHistory.length > 0 && (
+      {/* Bottom - move log (hidden when game is finished) */}
+      {screen === 'playing' && moveHistory.length > 0 && (
         <div className="absolute bottom-3 left-3 right-3 pointer-events-auto">
           <div className="glass-panel px-3 py-2 flex gap-3 overflow-x-auto text-[11px] font-mono">
             {moveHistory.slice(-8).map((move, i) => (
