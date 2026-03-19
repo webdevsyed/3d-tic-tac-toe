@@ -23,10 +23,10 @@ export function HomeScreen({ onShowHelp }: HomeScreenProps) {
       <BackgroundCubes />
 
       <div className="min-h-full flex flex-col items-center justify-center px-8 sm:px-10">
-        <div className="relative z-10 text-center animate-fade-in w-full max-w-xs sm:max-w-sm mx-auto">
+        <div className="relative z-10 text-center animate-fade-in w-full mx-auto">
           {/* Title */}
           <div className="mb-14 sm:mb-16">
-            <h1 className="font-display font-black tracking-wider text-white mb-3 whitespace-nowrap" style={{ fontSize: 'clamp(1.5rem, 5vw, 3rem)' }}>
+            <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-black tracking-wider text-white mb-3 whitespace-nowrap">
               3D TIC-TAC-TOE
             </h1>
             <p className="font-display text-xs sm:text-sm tracking-[0.4em] text-white/50 uppercase">
