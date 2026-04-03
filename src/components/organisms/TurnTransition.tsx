@@ -17,28 +17,28 @@ export function TurnTransition() {
     <div className="absolute inset-0 z-50 flex items-center justify-center bg-void/60 animate-fade-in">
       <button
         onClick={startTurn}
-        className="glass-panel px-8 py-8 text-center cursor-pointer transition-all hover:scale-105 active:scale-95 max-w-[280px] w-full mx-6"
+        className="glass-panel px-10 py-10 text-center cursor-pointer transition-all hover:scale-105 active:scale-95 max-w-[300px] w-full mx-8"
         style={{
           borderColor: color,
           borderWidth: 2,
           boxShadow: `0 0 40px ${color}33, 0 0 80px ${color}11`,
         }}
       >
-        <p className="text-white/40 font-display text-[10px] tracking-[0.3em] uppercase mb-3">
+        <p className="text-white/60 font-display text-[11px] tracking-[0.3em] uppercase mb-4">
           Pass to
         </p>
-        <div className="text-3xl mb-2" style={{ color }}>
+        <div className="text-3xl mb-3" style={{ color }}>
           {symbol}
         </div>
         <h2
-          className="font-display text-lg font-bold tracking-wider mb-4"
+          className="font-display text-lg font-bold tracking-wider mb-5"
           style={{ color }}
         >
           {playerName}
         </h2>
         <p
-          className="font-display text-[10px] tracking-wider uppercase"
-          style={{ color, opacity: 0.7 }}
+          className="font-display text-[11px] tracking-wider uppercase"
+          style={{ color, opacity: 0.85 }}
         >
           Tap to Start
         </p>

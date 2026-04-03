@@ -1,15 +1,12 @@
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
 import type { Group } from 'three';
 import { useGameStore } from '../../stores/gameStore';
 import { WinningLine } from '../molecules/WinningLine';
 import { Cell } from '../atoms/Cell';
-import { SymbolX } from '../atoms/SymbolX';
-import { SymbolSphere } from '../atoms/SymbolSphere';
-import { SymbolPyramid } from '../atoms/SymbolPyramid';
-import { GhostPreview } from '../atoms/GhostPreview';
+import { PlayerSymbol } from '../atoms/PlayerSymbol';
 import { coordToPosition, getSliceIndex, getSliceSplitOffset } from '../../utils/boardHelpers';
 import { CELL_SPACING, DEFAULT_CAMERA_POSITION } from '../../utils/constants';
 import type { BoardCoord, PlayerID, SliceView } from '../../types/game';
@@ -52,6 +49,14 @@ function AnimatedSliceGroup({
   return <group ref={groupRef}>{children}</group>;
 }
 
+interface SliceCell {
+  coord: BoardCoord;
+  li: number;
+  ri: number;
+  ci: number;
+  cellValue: PlayerID | null;
+}
+
 function BoardScene() {
   const board = useGameStore((s) => s.board);
   const currentTurn = useGameStore((s) => s.currentTurn);
@@ -66,38 +71,16 @@ function BoardScene() {
   const isInteractive = screen === 'playing';
   const isFinished = screen === 'finished';
 
-  const isWinningCell = useCallback(
-    (coord: BoardCoord): boolean => {
-      if (!winningLine) return false;
-      return winningLine.some(
-        (wc) => wc[0] === coord[0] && wc[1] === coord[1] && wc[2] === coord[2]
-      );
-    },
-    [winningLine]
-  );
-
-  const handleHover = useCallback((coord: BoardCoord | null) => {
-    setHoveredCoord(coord);
-  }, []);
-
-  const renderSymbol = (player: PlayerID, position: [number, number, number], coord: BoardCoord) => {
-    const dimmed = isFinished && winningLine !== null && !isWinningCell(coord);
-    const highlighted = isFinished && isWinningCell(coord);
-    const key = `symbol-${coord[0]}-${coord[1]}-${coord[2]}`;
-
-    switch (player) {
-      case 'P1':
-        return <SymbolX key={key} position={position} dimmed={dimmed} highlighted={highlighted} />;
-      case 'P2':
-        return <SymbolSphere key={key} position={position} dimmed={dimmed} highlighted={highlighted} />;
-      case 'P3':
-        return <SymbolPyramid key={key} position={position} dimmed={dimmed} highlighted={highlighted} />;
-    }
+  const isWinningCell = (coord: BoardCoord): boolean => {
+    if (!winningLine) return false;
+    return winningLine.some(
+      (wc) => wc[0] === coord[0] && wc[1] === coord[1] && wc[2] === coord[2]
+    );
   };
 
   // Group cells by slice index for animated splitting (memoized)
   const sliceGroups = useMemo(() => {
-    const groups: Map<number, Array<{ coord: BoardCoord; li: number; ri: number; ci: number; cellValue: PlayerID | null }>> = new Map();
+    const groups: Map<number, SliceCell[]> = new Map();
     board.forEach((layer, li) =>
       layer.forEach((row, ri) =>
         row.forEach((cellValue, ci) => {
@@ -145,11 +128,19 @@ function BoardScene() {
                   currentPlayer={currentTurn}
                   isInteractive={isInteractive}
                   onPlace={placeMove}
-                  onHover={handleHover}
+                  onHover={setHoveredCoord}
                 />
-                {cellValue && renderSymbol(cellValue, position, coord)}
+                {cellValue && (
+                  <PlayerSymbol
+                    key={`symbol-${coord[0]}-${coord[1]}-${coord[2]}`}
+                    player={cellValue}
+                    position={position}
+                    dimmed={isFinished && winningLine !== null && !isWinningCell(coord)}
+                    highlighted={isFinished && isWinningCell(coord)}
+                  />
+                )}
                 {isHovered && !cellValue && isInteractive && (
-                  <GhostPreview position={position} player={currentTurn} />
+                  <PlayerSymbol player={currentTurn} position={position} ghost />
                 )}
               </group>
             );

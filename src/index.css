@@ -16,28 +16,21 @@
   --font-mono: 'JetBrains Mono', monospace;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
 
-html {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background: var(--color-void);
-  color: white;
-  font-family: var(--font-mono);
-}
-
-body, #root {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background: var(--color-void);
-  color: white;
-  font-family: var(--font-mono);
+  html, body, #root {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: var(--color-void);
+    color: white;
+    font-family: var(--font-mono);
+  }
 }
 
 /* Safe area support for mobile notch/bottom bar */
@@ -47,6 +40,29 @@ body, #root {
 
 .safe-area-bottom {
   padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Modern scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
 }
 
 .glass-panel {
@@ -87,6 +103,16 @@ body, #root {
 .btn-neon:hover {
   background: var(--color-glass-hover);
   border-color: rgba(255, 255, 255, 0.2);
+}
+
+.btn-neon:focus-visible {
+  outline: 2px solid rgba(61, 139, 255, 0.8);
+  outline-offset: 2px;
+}
+
+input:focus-visible {
+  outline: 2px solid rgba(61, 139, 255, 0.6);
+  outline-offset: 1px;
 }
 
 @keyframes fade-in {

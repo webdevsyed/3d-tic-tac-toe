@@ -10,6 +10,7 @@ export function PlayerSetup() {
   const resetToHome = useGameStore((s) => s.resetToHome);
 
   const [names, setNames] = useState(['', '', '']);
+  const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
 
   if (screen !== 'setup') return null;
 
@@ -38,58 +39,60 @@ export function PlayerSetup() {
 
       <BackgroundCubes />
 
-      <div className="min-h-full flex items-center justify-center px-6 py-8">
-        <div className="relative z-10 w-full max-w-xs">
-        <h2 className="font-display text-lg sm:text-xl font-bold tracking-wider text-center text-white/80 mb-6">
-          Enter Player Names
-        </h2>
+      <div className="min-h-full flex items-center justify-center px-8 sm:px-10 py-10">
+        <div className="relative z-10 w-full max-w-xs sm:max-w-sm mx-auto">
+          <h2 className="font-display text-lg sm:text-xl font-bold tracking-wider text-center text-white/80 mb-8 sm:mb-10">
+            Enter Player Names
+          </h2>
 
-        <div className="flex flex-col gap-4 sm:gap-6 mb-8">
-          {playerIds.map((id, i) => (
-            <div key={id} className="relative">
-              <span
-                className="absolute left-4 top-1/2 -translate-y-1/2 text-lg"
-                style={{ color: PLAYER_COLORS[id] }}
-              >
-                {PLAYER_SYMBOLS[id]}
-              </span>
-              <input
-                type="text"
-                maxLength={15}
-                placeholder={`Player ${i + 1}`}
-                value={names[i]}
-                onChange={(e) => handleNameChange(i, e.target.value)}
-                className="w-full bg-white/5 border rounded-lg pl-12 pr-4 py-3 text-sm font-mono text-white placeholder-white/20 outline-none focus:bg-white/8 transition-colors"
-                style={{ borderColor: `${PLAYER_COLORS[id]}33` }}
-                onFocus={(e) => {
-                  (e.target as HTMLInputElement).style.borderColor = PLAYER_COLORS[id];
-                }}
-                onBlur={(e) => {
-                  (e.target as HTMLInputElement).style.borderColor = `${PLAYER_COLORS[id]}33`;
-                }}
-              />
-            </div>
-          ))}
-        </div>
+          <div className="flex flex-col gap-6 sm:gap-7">
+            {playerIds.map((id, i) => (
+              <div key={id}>
+                <label className="block text-[10px] font-display tracking-wider uppercase mb-1.5" style={{ color: `${PLAYER_COLORS[id]}99` }}>
+                  Player {i + 1}
+                </label>
+                <div className="relative">
+                  <span
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-lg"
+                    style={{ color: PLAYER_COLORS[id] }}
+                  >
+                    {PLAYER_SYMBOLS[id]}
+                  </span>
+                  <input
+                    type="text"
+                    maxLength={15}
+                    placeholder={`Player ${i + 1}`}
+                    value={names[i]}
+                    onChange={(e) => handleNameChange(i, e.target.value)}
+                    autoFocus={i === 0}
+                    className="w-full bg-white/5 border rounded-lg pl-14 pr-4 py-3 text-sm font-mono text-white placeholder-white/40 outline-none focus:bg-white/8 transition-colors"
+                    style={{ borderColor: focusedIndex === i ? PLAYER_COLORS[id] : `${PLAYER_COLORS[id]}33` }}
+                    onFocus={() => setFocusedIndex(i)}
+                    onBlur={() => setFocusedIndex(null)}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
 
-        <div className="flex flex-col gap-3">
-          <button
-            onClick={handleStart}
-            className="btn-neon text-base py-4 w-full hover:scale-[1.02] transition-transform"
-            style={{
-              borderColor: 'rgba(61, 139, 255, 0.4)',
-              boxShadow: '0 0 30px rgba(61, 139, 255, 0.15)',
-            }}
-          >
-            Start Game
-          </button>
-          <button
-            onClick={resetToHome}
-            className="btn-neon text-xs py-2 w-full opacity-40 hover:opacity-80"
-          >
-            Back
-          </button>
-        </div>
+          <div className="flex flex-col gap-3 sm:gap-4 mt-12 sm:mt-14">
+            <button
+              onClick={handleStart}
+              className="btn-neon text-base py-4 w-full hover:scale-[1.02] transition-transform"
+              style={{
+                borderColor: 'rgba(61, 139, 255, 0.4)',
+                boxShadow: '0 0 30px rgba(61, 139, 255, 0.15)',
+              }}
+            >
+              Start Game
+            </button>
+            <button
+              onClick={resetToHome}
+              className="btn-neon text-xs py-2 w-full opacity-60 hover:opacity-100"
+            >
+              Back
+            </button>
+          </div>
         </div>
       </div>
     </div>
